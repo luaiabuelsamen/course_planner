@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curriculum Parser</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+            position: relative;
+            cursor: pointer;
+        }
+        .prereq-popup, .coreq-popup {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 5px;
+            z-index: 1;
+        }
+        .prereq:hover .prereq-popup,
+        .coreq:hover .coreq-popup {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Course Schedule</h1>
+    <table>
+        <tr>
+            <th>Term</th>
+            <th>Course</th>
+        </tr>
+        {% for term in range(1, max_term + 1) %}
+            {% set courses_for_term = courses|selectattr('term', 'equalto', term)|list %}
+            <tr>
+
+                {% set counter = 0 %}
+                {% for course in courses_for_term %}
+                    {% if counter > 0 %}
+                        </tr><tr>
+                    {% endif %}
+                    <td class="course-cell">
+                        <span class="course-code">{{ course.course_code }}</span>
+                        <div class="prereq-popup">{{ course.prerequisites|join(', ') }}</div>
+                        <div class="coreq-popup">{{ course.corequisites|join(', ') }}</div>
+                    </td>
+                    {% set counter = counter + 1 %}
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
