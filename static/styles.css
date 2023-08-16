@@ -1,0 +1,75 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+    margin: 0;
+    padding: 0;
+}
+h1 {
+    text-align: center;
+    margin: 20px 0;
+    color: #1e4f71; /* McGill's official blue */
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+}
+th, td {
+    border: 1px solid #e0e0e0;
+    padding: 10px;
+    text-align: center;
+}
+th {
+    background-color: #f0f7fa;
+}
+.highlight {
+    background-color: #ffed8d; /* Light yellow for highlighting */
+}
+.highlight-coreq {
+    background-color: #ffbf71; /* Light yellow for highlighting */
+}
+.highlight-prereq {
+    background-color: #8df4ff; /* Light yellow for highlighting */
+}
+.course-cell {
+    white-space: nowrap;
+    max-width: 1%;
+    position: relative;
+}
+.course-table {
+    width: 100%;
+    table-layout: fixed;
+}
+.tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+.course-cell:hover .tooltip {
+    opacity: 1;
+}
+.total-credits-cell {
+    background-color: #f0f7fa;
+    font-weight: bold;
+}
+a {
+    color: #1e4f71; /* McGill's official blue */
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+.course-credits {
+    font-size: 12px;
+    color: #777;
+}

@@ -1,57 +1,43 @@
 <!DOCTYPE html>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+<script src="{{ url_for('static', filename='script.js') }}" defer></script>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Curriculum Parser</title>
-    <style>
-        table {
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: center;
-            position: relative;
-            cursor: pointer;
-        }
-        .prereq-popup, .coreq-popup {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            border: 1px solid #ddd;
-            padding: 5px;
-            z-index: 1;
-        }
-        .prereq:hover .prereq-popup,
-        .coreq:hover .coreq-popup {
-            display: block;
-        }
-    </style>
 </head>
 <body>
-    <h1>Course Schedule</h1>
-    <table>
+    <h1>{{program}} Course Schedule</h1>
+    <table class="sortable">
         <tr>
             <th>Term</th>
             <th>Course</th>
         </tr>
         {% for term in range(1, max_term + 1) %}
-            {% set courses_for_term = courses|selectattr('term', 'equalto', term)|list %}
-            <tr>
-
-                {% set counter = 0 %}
-                {% for course in courses_for_term %}
-                    {% if counter > 0 %}
-                        </tr><tr>
-                    {% endif %}
-                    <td class="course-cell">
-                        <span class="course-code">{{ course.course_code }}</span>
-                        <div class="prereq-popup">{{ course.prerequisites|join(', ') }}</div>
-                        <div class="coreq-popup">{{ course.corequisites|join(', ') }}</div>
-                    </td>
-                    {% set counter = counter + 1 %}
-                {% endfor %}
+            <tr class="sortable-row">
+                <td style="vertical-align: middle;">
+                    {{ courses|selectattr('term', 'equalto', term)|map(attribute='credits')|sum }}
+                </td>
+                <td>
+                    <table class="course-table">
+                        <tr>
+                            {% set courses_for_term = courses|selectattr('term', 'equalto', term)|list %}
+                            {% for course in courses_for_term %}
+                            <td class="course-cell" id="{{ course.course_code }}">
+                                <a href="https://www.mcgill.ca/study/courses/{{ course.course_code | replace(' ', '-') | lower }}"
+                                   onmouseover="highlightPrereqsAndCoreqs('{{ course.course_code }}', '{{ course.prerequisites|join(',') }}', '{{ course.corequisites|join(',') }}')"
+                                   onmouseout="removeHighlights('{{ course.course_code }}', '{{ course.prerequisites|join(',') }}', '{{ course.corequisites|join(',') }}')">
+                                    {{ course.course_code }}
+                                    <div class="course-credits">{{ course.credits }} credits</div>
+                                    <div class="tooltip">{{ course.course_name }}</div>
+                                </a>
+                            </td>
+                            {% endfor %}
+                        </tr>
+                    </table>
+                </td>
             </tr>
         {% endfor %}
     </table>

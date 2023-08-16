@@ -9,6 +9,8 @@ This is a Python application that extracts and parses course information from a 
 - Highlights prerequisites and corequisites when hovering over a course.
 - Utilizes Flask for the web application.
 
+![example](examples/example.png)
+
 ## Prerequisites
 
 - Python 3.6 or higher

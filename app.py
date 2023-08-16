@@ -8,7 +8,7 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     max_term = max(course['term'] for course in courses) if courses else 0
-    return render_template('index.html', courses=courses, max_term=max_term)
+    return render_template('index.html', courses=courses[:-18], max_term=max_term, program= program)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Extract and parse course information from a curriculum table.")
@@ -17,6 +17,11 @@ if __name__ == "__main__":
 
     doc = Document(args.file_path)
     tables = doc.tables
+    if doc.paragraphs:
+        first_line = doc.paragraphs[0].text
+        program = first_line
+    else:
+        program =  None  # Document has no paragraphs
 
     if len(tables) > 0:
         all_table_data = []

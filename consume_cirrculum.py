@@ -27,7 +27,7 @@ def parse_courses(table_data):
             else:
                 current_course['course_code'] = row[0]
                 current_course['course_name'] = row[1]
-                current_course['credits'] = row[2]
+                current_course['credits'] = int(row[2])
                 current_course['prerequisites'] = []
                 current_course['corequisites'] = []
                 current_course['term'] = term
@@ -39,12 +39,11 @@ def parse_courses(table_data):
                 for match in matches:
                     prerequisites = match.group(1).strip()
                     corequisites = match.group(2)
+                    if corequisites:
+                        corequisites = corequisites.strip()
                     prerequisite_courses = re.split(r'\s*(?:,|\bor\b)\s*', prerequisites)
                     corequisite_courses = re.split(r'\s*(?:,|\bor\b)\s*', corequisites) if corequisites else []
-
-                if row[3].startswith('P'):
                     current_course['prerequisites'] = prerequisite_courses
-                if len(row) > 4 and row[4].startswith('C'):
                     current_course['corequisites'] = corequisite_courses
                 courses.append(current_course)
     return courses
@@ -60,7 +59,7 @@ def main(file_path):
             all_table_data.extend(table_data)
         
         courses = parse_courses(all_table_data)
-        
+
         for course in courses:
             print("Course Code:", course['course_code'])
             print("Course Name:", course['course_name'])
